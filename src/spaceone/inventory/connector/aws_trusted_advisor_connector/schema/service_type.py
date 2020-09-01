@@ -12,9 +12,10 @@ cst_trusted_advisor.tags = {
 
 cst_trusted_advisor._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('CheckId', 'data.check_id'),
         TextDyField.data_source('Category', 'data.category'),
+        TextDyField.data_source('Name', 'data.name'),
         TextDyField.data_source('Status', 'data.status'),
+        TextDyField.data_source('Check ID', 'data.check_id'),
     ],
     search=[
         SearchField.set(name='Check ID', key='data.check_id'),
