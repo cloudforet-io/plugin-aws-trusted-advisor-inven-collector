@@ -12,7 +12,11 @@ from spaceone.inventory.libs.schema.resource import ReferenceModel
 
 _LOGGER = logging.getLogger(__name__)
 
-DEFAULT_LANGUAGE='en'
+#DEFAULT_LANGUAGE='en'
+#DEFAULT_REFRESH=False
+DEFAULT_LANGUAGE='ko'
+DEFAULT_REFRESH=True
+
 
 class TrustedAdvisorConnector(SchematicAWSConnector):
     response_schema = CheckResponse
@@ -41,13 +45,13 @@ class TrustedAdvisorConnector(SchematicAWSConnector):
         return resources
 
     def request_data(self) -> List[Check]:
-        check_ids = self._list_check_ids()
+        language = self.options.get('language', DEFAULT_LANGUAGE)
+        check_ids = self._list_check_ids(language)
         for checkId in check_ids:
             check_id = checkId.id
-            lang = self.options.get('language', DEFAULT_LANGUAGE)
             try:
                 response = self.client.describe_trusted_advisor_check_result(checkId=check_id,
-                                                                             language=lang)
+                                                                             language=language)
                 raw = response.get('result', None)
                 # TEST
                 if raw == None:
@@ -77,11 +81,13 @@ class TrustedAdvisorConnector(SchematicAWSConnector):
             except Exception as e:
                 print(f'[request_data] {e}')
 
-    def _list_check_ids(self, language='en'):
+    def _list_check_ids(self, language):
         check_ids = []
-        lang = self.config.get('language', DEFAULT_LANGUAGE)
-        response = self.client.describe_trusted_advisor_checks(language=lang)
+        response = self.client.describe_trusted_advisor_checks(language=language)
+        need_refresh = self.options.get('refresh', DEFAULT_REFRESH)
         for raw in response.get('checks', []):
+            if need_refresh:
+                self._refresh_check(raw['id'])
             check_ids.append(CheckId(raw, strict=False))
         return check_ids
 
@@ -103,3 +109,10 @@ class TrustedAdvisorConnector(SchematicAWSConnector):
         else:
             return {'headers': headers, 'resources': res_list}
 
+    def _refresh_check(self, check_id):
+        # Refresh check
+        # Notice) We are not waiting for the result
+        try:
+            self.client.refresh_trusted_advisor_check(checkId=check_id)
+        except:
+            pass
