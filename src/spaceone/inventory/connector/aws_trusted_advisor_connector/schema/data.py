@@ -35,7 +35,7 @@ class Check(Model):
     status = StringType(deserialize_from="status", choices=("ok","warning", "error", "not_available"))
     resources_summary = ModelType(ResourcesSummary, deserialize_from='resourcesSummary')
     flagged_resources = ModelType(FlaggedResources, deserialize_from='flagged_resources')
-
+    account_id = StringType(default="")
     @serializable
     def reference(self):
         return {
