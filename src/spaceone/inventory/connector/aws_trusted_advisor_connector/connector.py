@@ -66,6 +66,8 @@ class TrustedAdvisorConnector(SchematicAWSConnector):
                 #    import time
                 #    time.sleep(5)
                 #raw.update({'headers': ['a','b','c'], 'flagged_resources': [[1,2,3], [4,5,6]]})
+                # Change 1.1
+                #{ 'flagged_resources': [{'a': 1, 'b': 2, 'c': 3}, {'a': 4, 'b': 5, 'c': 6}] }
                 flagged_resources = self._merge_flagged_resources(checkId, raw)
                 raw.update({'flagged_resources':flagged_resources})
                 raw.update({
@@ -92,6 +94,9 @@ class TrustedAdvisorConnector(SchematicAWSConnector):
         return check_ids
 
     def _merge_flagged_resources(self, checkId, checkResult):
+        """
+        Return: list
+        """
         headers = ['status', 'region']
         headers.extend(checkId.metadata)
         res_list = []
@@ -105,9 +110,20 @@ class TrustedAdvisorConnector(SchematicAWSConnector):
                     result.append("")
                 result.extend(res['metadata'])
                 res_list.append(result)
-            return {'headers': headers, 'resources': res_list}
+            #return {'headers': headers, 'resources': res_list}
         else:
-            return {'headers': headers, 'resources': res_list}
+            #return {'headers': headers, 'resources': res_list}
+            pass
+        # Create Result(list)
+        resources =[]
+        for res in res_list:
+            data = {}
+            for idx in range(len(headers)):
+                data[headers[idx]] = res[idx]
+            resources.append(data)
+        return resources
+
+
 
     def _refresh_check(self, check_id):
         # Refresh check

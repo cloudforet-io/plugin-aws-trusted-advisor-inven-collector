@@ -1,7 +1,7 @@
 import logging
 
 from schematics import Model
-from schematics.types import ModelType, StringType, IntType, DateTimeType, serializable, ListType, BooleanType
+from schematics.types import ModelType, StringType, IntType, DateTimeType, serializable, ListType, BooleanType, DictType
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -34,7 +34,8 @@ class Check(Model):
     timestamp = StringType(deserialize_from="timestamp")
     status = StringType(deserialize_from="status", choices=("ok","warning", "error", "not_available"))
     resources_summary = ModelType(ResourcesSummary, deserialize_from='resourcesSummary')
-    flagged_resources = ModelType(FlaggedResources, deserialize_from='flagged_resources')
+    #flagged_resources = ModelType(FlaggedResources, deserialize_from='flagged_resources')
+    flagged_resources = ListType(DictType(StringType), deserialize_from='flagged_resources')
     account_id = StringType(default="")
     @serializable
     def reference(self):
