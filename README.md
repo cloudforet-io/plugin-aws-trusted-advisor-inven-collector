@@ -13,3 +13,8 @@ Support data.account_id
 
 Change flagged_resource.
 Add table data in Affected Resources
+
+## Version 1.0.3
+
+Add Description tab
+- Support HTML text
