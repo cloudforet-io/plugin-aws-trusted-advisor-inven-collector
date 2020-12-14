@@ -1,1 +1,0 @@
-from spaceone.inventory.connector.aws_trusted_advisor_connector.connector import TrustedAdvisorConnector

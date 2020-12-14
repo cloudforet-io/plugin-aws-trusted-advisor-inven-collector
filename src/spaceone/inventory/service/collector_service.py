@@ -19,7 +19,7 @@ class CollectorService(BaseService):
         super().__init__(metadata)
 
         self.execute_managers = [
-            'TrustedAdvisorConnectorManager'
+            'TrustedAdvisorManager'
         ]
 
     @check_required(['options'])
@@ -44,7 +44,7 @@ class CollectorService(BaseService):
         options = params['options']
         secret_data = params.get('secret_data', {})
 
-        if secret_data != {}:
+        if not secret_data:
             self.get_account_id(secret_data)
 
         return {}
@@ -76,17 +76,18 @@ class CollectorService(BaseService):
             for execute_manager in self.execute_managers:
                 print(f'@@@ {execute_manager} @@@')
                 _manager = self.locator.get_manager(execute_manager)
-                future_executors.append(executor.submit(_manager.collect_resources, **params))
+                future_executors.append(executor.submit(_manager.collect_resources, params))
 
             for future in concurrent.futures.as_completed(future_executors):
-                for result in future.result():
-                    yield result
+                for resource in future.result():
+                    yield resource.to_primitive()
 
         print(f'TOTAL TIME : {time.time() - start_time} Seconds')
 
     @staticmethod
     def get_account_id(secret_data, region=DEFAULT_REGION):
-        _session = get_session(secret_data, region)
-        sts_client = _session.client('sts')
-        return sts_client.get_caller_identity()['Account']
+        aws_connector = AWSConnector(secret_data=secret_data)
+        aws_connector.service = 'sts'
+        aws_connector.set_client(region)
+        return aws_connector.client.get_caller_identity()['Account']
 

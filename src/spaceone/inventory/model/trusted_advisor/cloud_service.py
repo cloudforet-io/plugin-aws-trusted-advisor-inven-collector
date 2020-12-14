@@ -1,9 +1,10 @@
-from schematics.types import ModelType, StringType, PolyModelType, DictType, ListType
+from schematics.types import ModelType, StringType, PolyModelType
 
-from spaceone.inventory.connector.aws_trusted_advisor_connector.schema.data import Check
-from spaceone.inventory.libs.schema.resource import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
-from spaceone.inventory.libs.schema.dynamic_field import TextDyField, ListDyField, BadgeDyField, EnumDyField
-from spaceone.inventory.libs.schema.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, HTMLDynamicLayout
+from spaceone.inventory.model.trusted_advisor.data import Check
+from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField
+from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
+    HTMLDynamicLayout
+from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
 
 resources = TableDynamicLayout.set_fields('Affected Resources', 'data.flagged_resources')
 resources.type = 'raw-table'
@@ -13,7 +14,6 @@ check = ItemDynamicLayout.set_fields('Check Information', fields=[
     TextDyField.data_source('Category', 'data.category'),
     TextDyField.data_source('Status', 'data.status'),
     TextDyField.data_source('Checked at', 'data.timestamp'),
-    # TextDyField.data_source('Description', 'data.description')
 ])
 
 html_description = HTMLDynamicLayout.set('Description', root_path='data.description')
@@ -33,4 +33,3 @@ class CheckResource(SupportResource):
 
 class CheckResponse(CloudServiceResponse):
     resource = PolyModelType(CheckResource)
-
