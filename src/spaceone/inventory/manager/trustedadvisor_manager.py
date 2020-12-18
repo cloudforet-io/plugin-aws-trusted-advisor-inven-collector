@@ -4,6 +4,7 @@ from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.connector.trusted_advisor import TrustedAdvisorConnector
 from spaceone.inventory.model.trusted_advisor.data import Check, CheckId
 from spaceone.inventory.model.trusted_advisor.cloud_service import CheckResource, CheckResponse
+from spaceone.inventory.model.trusted_advisor.cloud_service_type import CLOUD_SERVICE_TYPES
 
 DEFAULT_REGION = 'us-east-1'
 DEFAULT_LANGUAGE = 'ko'
@@ -12,6 +13,7 @@ DEFAULT_REFRESH = True
 
 class TrustedAdvisorManager(AWSManager):
     connector_name = 'TrustedAdvisorConnector'
+    cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_services(self, params):
         print("** Trusted Advisor Start **")
