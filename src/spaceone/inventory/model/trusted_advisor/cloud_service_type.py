@@ -4,9 +4,9 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 
 cst_ta = CloudServiceTypeResource()
-cst_ta.name = 'TrustedAdvisor'
+cst_ta.name = 'Check'
 cst_ta.provider = 'aws'
-cst_ta.group = 'Support'
+cst_ta.group = 'TrustedAdvisor'
 cst_ta.labels = ['Management']
 cst_ta.is_primary = True
 cst_ta.tags = {
