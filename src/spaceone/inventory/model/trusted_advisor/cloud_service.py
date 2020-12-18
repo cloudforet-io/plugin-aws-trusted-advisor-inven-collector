@@ -21,12 +21,12 @@ html_description = HTMLDynamicLayout.set('Description', root_path='data.descript
 metadata = CloudServiceMeta.set_layouts(layouts=[check, html_description, resources])
 
 
-class SupportResource(CloudServiceResource):
-    cloud_service_group = StringType(default='Support')
+class TrustedAdvisorResource(CloudServiceResource):
+    cloud_service_group = StringType(default='TrustedAdvisor')
 
 
-class CheckResource(SupportResource):
-    cloud_service_type = StringType(default='TrustedAdvisor')
+class CheckResource(TrustedAdvisorResource):
+    cloud_service_type = StringType(default='Check')
     data = ModelType(Check)
     _metadata = ModelType(CloudServiceMeta, default=metadata, serialized_name='metadata')
 
