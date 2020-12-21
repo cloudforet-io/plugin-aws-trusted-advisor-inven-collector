@@ -1,4 +1,4 @@
-from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, SearchField
+from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, SearchField, EnumDyField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
 
@@ -17,7 +17,12 @@ cst_ta._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Category', 'data.category'),
         TextDyField.data_source('Name', 'data.name'),
-        TextDyField.data_source('Status', 'data.status'),
+        EnumDyField.data_source('Status', 'data.status', default_state={
+            'safe': ['ok'],
+            'warning': ['warning'],
+            'alert': ['error'],
+            'disable': ['not_available']
+        }),
         TextDyField.data_source('Check ID', 'data.check_id'),
     ],
     search=[
