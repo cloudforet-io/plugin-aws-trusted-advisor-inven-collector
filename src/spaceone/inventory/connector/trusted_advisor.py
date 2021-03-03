@@ -32,4 +32,3 @@ class TrustedAdvisorConnector(AWSConnector):
             self.client.refresh_trusted_advisor_check(checkId=check_id, **query)
         except Exception as e:
             pass
-

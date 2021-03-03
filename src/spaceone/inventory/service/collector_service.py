@@ -10,6 +10,7 @@ _LOGGER = logging.getLogger(__name__)
 MAX_WORKER = 20
 SUPPORTED_FEATURES = ['garbage_collection']
 SUPPORTED_RESOURCE_TYPE = ['inventory.CloudService', 'inventory.CloudServiceType']
+SUPPORTED_SCHEDULES = ['hours']
 DEFAULT_REGION = 'us-east-1'
 FILTER_FORMAT = []
 
@@ -30,7 +31,8 @@ class CollectorService(BaseService):
         capability = {
             'filter_format': FILTER_FORMAT,
             'supported_resource_type': SUPPORTED_RESOURCE_TYPE,
-            'supported_features': SUPPORTED_FEATURES
+            'supported_features': SUPPORTED_FEATURES,
+            'supported_schedules': SUPPORTED_SCHEDULES
         }
         return {'metadata': capability}
 
@@ -69,9 +71,6 @@ class CollectorService(BaseService):
         })
 
         start_time = time.time()
-        resource_regions = []
-        collected_region_code = []
-
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKER) as executor:
             print("[ EXECUTOR START ]")
             future_executors = []
@@ -81,8 +80,11 @@ class CollectorService(BaseService):
                 future_executors.append(executor.submit(_manager.collect_resources, params))
 
             for future in concurrent.futures.as_completed(future_executors):
-                for resource in future.result():
-                    yield resource.to_primitive()
+                try:
+                    for resource in future.result():
+                        yield resource.to_primitive()
+                except Exception as e:
+                    _LOGGER.error(f'failed to result {e}')
 
         print(f'TOTAL TIME : {time.time() - start_time} Seconds')
 
