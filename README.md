@@ -19,6 +19,6 @@ Add table data in Affected Resources
 Add Description tab
 - Support HTML text
 
-## Version 1.3
+## Version 1.4
 
 Add name field
