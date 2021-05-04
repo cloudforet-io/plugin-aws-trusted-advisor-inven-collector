@@ -65,6 +65,7 @@ class TrustedAdvisorManager(AWSManager):
             check_data = Check(check_result, strict=False)
 
             check_resource = CheckResource({
+                'name': check_data.name,
                 'data': check_data,
                 'region_code': 'global',
                 'reference': ReferenceModel(check_data.reference())
