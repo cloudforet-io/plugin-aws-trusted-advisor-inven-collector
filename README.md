@@ -5,7 +5,7 @@
 
 
 Find us also at [Dockerhub](https://hub.docker.com/repository/docker/spaceone/plugin-aws-trusted-advisor-inven-collector)
-> Latest stable version : 1.4
+> Latest stable version : 1.4.1
 
 Please contact us if you need any further information. (<support@spaceone.dev>)
 
