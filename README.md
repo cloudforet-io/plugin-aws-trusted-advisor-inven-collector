@@ -5,7 +5,7 @@
 
 
 Find us also at [Dockerhub](https://hub.docker.com/repository/docker/spaceone/plugin-aws-trusted-advisor-inven-collector)
-> Latest stable version : 1.4
+> Latest stable version : 1.4.1
 
 Please contact us if you need any further information. (<support@spaceone.dev>)
 
@@ -49,20 +49,28 @@ authentication privilege for followings:
 ---
 # Release Note
 
-## Version 1.0.1
+## Version 1.4.1
 
-Support data.account_id
+Add Error Resource
 
-## Version 1.0.2
+## Version 1.4
 
-Change flagged_resource.
-Add table data in Affected Resources
+Add name field
 
 ## Version 1.0.3
 
 Add Description tab
 - Support HTML text
 
-## Version 1.4
+## Version 1.0.2
 
-Add name field
+Change flagged_resource.
+Add table data in Affected Resources
+
+## Version 1.0.1
+
+Support data.account_id
+
+
+
+
