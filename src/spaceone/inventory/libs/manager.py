@@ -12,7 +12,7 @@ class AWSManager(BaseManager):
     connector_name = None
     response_schema = None
     cloud_service_group = 'TrustedAdvisor'
-    cloud_service_type = 'inventory.CloudService'
+    cloud_service_type = 'Check'
     cloud_service_types = []
 
     def verify(self, options, secret_data, **kwargs):
