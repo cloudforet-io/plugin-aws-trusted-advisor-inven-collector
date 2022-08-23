@@ -23,6 +23,7 @@ class CloudServiceResource(Model):
     name = StringType(default="")
     reference = ModelType(ReferenceModel)
     region_code = StringType()
+    account = StringType(default="")
     _metadata = PolyModelType(CloudServiceMeta, serialize_when_none=False, serialized_name='metadata')
 
 
