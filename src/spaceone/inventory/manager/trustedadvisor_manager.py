@@ -48,17 +48,6 @@ class TrustedAdvisorManager(AWSManager):
                     # Nothing to do
                     continue
 
-                # if status != "ok", there exists flagged resources
-                # Processing flagged resource for easy viewing(a.k.a. TableDynamic)
-                # if raw['status'] != "ok":
-                #    print(checkId.metadata)
-                #    print(raw)
-                #    import time
-                #    time.sleep(5)
-                # raw.update({'headers': ['a','b','c'], 'flagged_resources': [[1,2,3], [4,5,6]]})
-                # Change 1.1
-                # { 'flagged_resources': [{'a': 1, 'b': 2, 'c': 3}, {'a': 4, 'b': 5, 'c': 6}] }
-
                 flagged_resources = self._merge_flagged_resources(check_id_data, check_result)
                 check_result.update({'flagged_resources': flagged_resources})
                 check_result.update({
@@ -75,6 +64,7 @@ class TrustedAdvisorManager(AWSManager):
                     'name': check_data.name,
                     'data': check_data,
                     'region_code': 'global',
+                    'account': params['account_id'],
                     'reference': ReferenceModel(check_data.reference())
                 })
 
