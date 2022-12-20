@@ -16,7 +16,6 @@ cst_ta.tags = {
 cst_ta._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Category', 'data.category'),
-        TextDyField.data_source('Name', 'data.name'),
         EnumDyField.data_source('Status', 'data.status', default_state={
             'safe': ['ok'],
             'warning': ['warning'],
