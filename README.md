@@ -5,7 +5,7 @@
   <img width="245" src="https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-cloudservice.svg">
   <p> 
     <br>
-    <img alt="Version"  src="https://img.shields.io/badge/version-1.4.2-blue.svg?cacheSeconds=2592000"  />    
+    <img alt="Version"  src="https://img.shields.io/badge/version-1.4.7-blue.svg?cacheSeconds=2592000"  />    
     <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
   </p> 
 </div>   
@@ -16,7 +16,7 @@
 
 
 Find us also at [Dockerhub](https://hub.docker.com/repository/docker/spaceone/plugin-aws-trusted-advisor-inven-collector)
-> Latest stable version : 1.4.2
+> Latest stable version : 1.4.7
 
 Please contact us if you need any further information. (<support@spaceone.dev>)
 
@@ -59,6 +59,9 @@ authentication privilege for followings:
 
 ---
 # Release Note
+
+## Version 1.4.7
+[Remove name field in metadata (duplicated)](https://github.com/cloudforet-io/plugin-aws-trusted-advisor-inven-collector/pull/4)
 
 ## Version 1.4.2
 [fix: update cloud_service_type](https://github.com/spaceone-dev/plugin-aws-trusted-advisor-inven-collector/commit/9f29f245cf9e0cc769ebfad246d558a79174229d)
