@@ -46,7 +46,7 @@ authentication privilege for followings:
             "Action": [
                 "support:DescribeTrustedAdvisorChecks",
                 "support:DescribeTrustedAdvisorCheckResult",
-                "support:RefreshTrustedAdvisorCheck",
+                "support:RefreshTrustedAdvisorCheck"
             ],
             "Effect": "Allow",
             "Resource": "*"
