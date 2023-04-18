@@ -80,7 +80,7 @@ class TrustedAdvisorManager(AWSManager):
         """
         Return: list
         """
-        headers = ['status', 'region']
+        headers = ['status']
         headers.extend(check_id_data.metadata)
 
         res_list = []
@@ -88,10 +88,6 @@ class TrustedAdvisorManager(AWSManager):
             flagged_resources = checkResult['flaggedResources']
             for res in flagged_resources:
                 result = [res['status']]
-                if 'region' in res:
-                    result.append(res['region'])
-                else:
-                    result.append("")
                 result.extend(res.get('metadata', []))
                 res_list.append(result)
         else:
