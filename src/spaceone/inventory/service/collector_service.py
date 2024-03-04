@@ -13,24 +13,21 @@ class CollectorService(BaseService):
     def __init__(self, metadata):
         super().__init__(metadata)
 
-        self.execute_managers = [
-            'TrustedAdvisorManager'
-        ]
+        self.execute_managers = ["TrustedAdvisorManager"]
 
-    @check_required(['options'])
+    @check_required(["options"])
     def init(self, params):
-        """ init plugin by options
-        """
+        """init plugin by options"""
         capability = {
-            'filter_format': FILTER_FORMAT,
-            'supported_resource_type': SUPPORTED_RESOURCE_TYPE,
-            'supported_features': SUPPORTED_FEATURES,
-            'supported_schedules': SUPPORTED_SCHEDULES
+            "filter_format": FILTER_FORMAT,
+            "supported_resource_type": SUPPORTED_RESOURCE_TYPE,
+            "supported_features": SUPPORTED_FEATURES,
+            "supported_schedules": SUPPORTED_SCHEDULES,
         }
-        return {'metadata': capability}
+        return {"metadata": capability}
 
     @transaction
-    @check_required(['options', 'secret_data'])
+    @check_required(["options", "secret_data"])
     def verify(self, params):
         """
         Args:
@@ -38,8 +35,8 @@ class CollectorService(BaseService):
                 - options
                 - secret_data
         """
-        options = params['options']
-        secret_data = params.get('secret_data', {})
+        options = params["options"]
+        secret_data = params.get("secret_data", {})
 
         if not secret_data:
             self.get_account_id(secret_data)
@@ -47,7 +44,7 @@ class CollectorService(BaseService):
         return {}
 
     @transaction
-    @check_required(['options', 'secret_data', 'filter'])
+    @check_required(["options", "secret_data", "filter"])
     def list_resources(self, params):
         """
         Args:
@@ -57,11 +54,9 @@ class CollectorService(BaseService):
                 - filter
         """
 
-        secret_data = params['secret_data']
+        secret_data = params["secret_data"]
 
-        params.update({
-            'account_id': self.get_account_id(secret_data)
-        })
+        params.update({"account_id": self.get_account_id(secret_data)})
 
         start_time = time.time()
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKER) as executor:
@@ -75,14 +70,15 @@ class CollectorService(BaseService):
                     for resource in future.result():
                         yield resource.to_primitive()
                 except Exception as e:
-                    _LOGGER.error(f'failed to result {e}')
+                    _LOGGER.error(f"failed to result {e}")
 
-        _LOGGER.debug(f'[collect] TOTAL FINISHED TIME : {time.time() - start_time} Seconds')
+        _LOGGER.debug(
+            f"[collect] TOTAL FINISHED TIME : {time.time() - start_time} Seconds"
+        )
 
     @staticmethod
     def get_account_id(secret_data, region=DEFAULT_REGION):
         aws_connector = AWSConnector(secret_data=secret_data)
-        aws_connector.service = 'sts'
+        aws_connector.service = "sts"
         aws_connector.set_client(region)
-        return aws_connector.client.get_caller_identity()['Account']
-
+        return aws_connector.client.get_caller_identity()["Account"]
