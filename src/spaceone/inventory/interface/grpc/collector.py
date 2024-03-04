@@ -5,6 +5,9 @@ from spaceone.core.pygrpc.message_type import *
 from spaceone.inventory.service import CollectorService
 
 
+# _LOGGER = logging.getLogger(__name__)
+
+
 class Collector(BaseAPI, collector_pb2_grpc.CollectorServicer):
     pb2 = collector_pb2
     pb2_grpc = collector_pb2_grpc
@@ -19,11 +22,7 @@ class Collector(BaseAPI, collector_pb2_grpc.CollectorServicer):
     def verify(self, request, context):
         params, metadata = self.parse_request(request, context)
 
-        collector_svc: CollectorService = self.locator.get_service(
-            "CollectorService", metadata
-        )
-
-        with collector_svc:
+        with self.locator.get_service("CollectorService", metadata) as collector_svc:
             collector_svc.verify(params)
             return self.locator.get_info("EmptyInfo")
 
