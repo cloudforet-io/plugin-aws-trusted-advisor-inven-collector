@@ -89,7 +89,7 @@ class TrustedAdvisorManager(AWSManager):
 
                 ta_resources.append(CheckResponse({"resource": check_resource}))
             except Exception as e:
-                event_resources.append(self.generate_error(arn, e))
+                ta_resources.append(self.generate_error(arn, e))
 
         _LOGGER.debug(f" Trusted Advisor Finished {time.time() - start_time} Seconds")
         return ta_resources
