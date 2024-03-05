@@ -67,7 +67,7 @@ class TrustedAdvisorManager(AWSManager):
                 check_result.update({"flagged_resources": flagged_resources})
                 check_result.update(
                     {
-                        "name": check_id_data.Name,
+                        "name": check_id_data.name,
                         "category": check_id_data.category,
                         "description": check_id_data.description,
                         "arn": arn,
