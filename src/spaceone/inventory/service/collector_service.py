@@ -1,8 +1,11 @@
 import time
 import logging
+import json
 import concurrent.futures
 from spaceone.core.service import *
+from spaceone.core.pygrpc.message_type import *
 from spaceone.inventory.libs.connector import *
+from spaceone.inventory.libs.schema.error_resource import ErrorResourceResponse
 from spaceone.inventory.conf.cloud_service_conf import *
 
 _LOGGER = logging.getLogger(__name__)
@@ -68,9 +71,37 @@ class CollectorService(BaseService):
             for future in concurrent.futures.as_completed(future_executors):
                 try:
                     for resource in future.result():
-                        yield resource.to_primitive()
+                        processed_resource = resource.to_primitive()
+                        self.postprocess_resource(processed_resource)
+                        yield processed_resource
                 except Exception as e:
-                    _LOGGER.error(f"failed to result {e}")
+                    _LOGGER.error(
+                        f"[collect] failed to yield result => {e}", exc_info=True
+                    )
+                    if type(e) is dict:
+                        error_resource_response = ErrorResourceResponse(
+                            {
+                                "message": json.dumps(e),
+                                "resource": {
+                                    "resource_id": "",
+                                    "cloud_service_group": "",
+                                    "cloud_service_type": "inventory.Error",
+                                },
+                            }
+                        )
+                    else:
+                        error_resource_response = ErrorResourceResponse(
+                            {
+                                "message": json.dumps(e),
+                                "resource": {
+                                    "resource_id": "",
+                                    "cloud_service_group": "",
+                                    "cloud_service_type": "inventory.Error",
+                                },
+                            }
+                        )
+                    _LOGGER.debug(error_resource_response)
+                    yield error_resource_response.to_primitive()
 
         _LOGGER.debug(
             f"[collect] TOTAL FINISHED TIME : {time.time() - start_time} Seconds"
@@ -82,3 +113,10 @@ class CollectorService(BaseService):
         aws_connector.service = "sts"
         aws_connector.set_client(region)
         return aws_connector.client.get_caller_identity()["Account"]
+
+    @staticmethod
+    def postprocess_resource(resource):
+        if resource.get("match_rules"):
+            resource["match_rules"] = change_struct_type(resource["match_rules"])
+        if resource.get("resource"):
+            resource["resource"] = change_struct_type(resource["resource"])
