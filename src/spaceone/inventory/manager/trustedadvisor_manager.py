@@ -106,8 +106,11 @@ class TrustedAdvisorManager(AWSManager):
         if "flaggedResources" in checkResult:
             flagged_resources = checkResult["flaggedResources"]
             for res in flagged_resources:
+
                 result = [res["status"]]
                 result.extend(res.get("metadata", []))
+                if len(result) == 1:
+                    print(f"check id is {checkResult['checkId']}")
                 res_list.append(result)
         else:
             pass
@@ -115,11 +118,6 @@ class TrustedAdvisorManager(AWSManager):
         resources = []
         for res in res_list:
             data = {}
-            print(len(res) > len(headers))
-            print(len(res) == len(headers))
-            print(
-                f"length of res is {len(res)}, and length of headers is {len(headers)}"
-            )
             for idx in range(len(headers)):
                 if idx < len(res):
                     data[headers[idx]] = res[idx]
