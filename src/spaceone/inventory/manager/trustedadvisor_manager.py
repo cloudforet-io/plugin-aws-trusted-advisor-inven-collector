@@ -106,11 +106,9 @@ class TrustedAdvisorManager(AWSManager):
         if "flaggedResources" in checkResult:
             flagged_resources = checkResult["flaggedResources"]
             for res in flagged_resources:
-
                 result = [res["status"]]
                 result.extend(res.get("metadata", []))
-                if len(result) == 1:
-                    print(f"check id is {checkResult['checkId']}")
+                res_list.append(result)
                 res_list.append(result)
         else:
             pass
