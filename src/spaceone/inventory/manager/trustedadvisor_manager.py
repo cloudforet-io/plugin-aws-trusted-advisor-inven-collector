@@ -115,8 +115,16 @@ class TrustedAdvisorManager(AWSManager):
         resources = []
         for res in res_list:
             data = {}
+            print(len(res) > len(headers))
+            print(len(res) == len(headers))
+            print(
+                f"length of res is {len(res)}, and length of headers is {len(headers)}"
+            )
             for idx in range(len(headers)):
-                data[headers[idx]] = res[idx]
+                if idx < len(res):
+                    data[headers[idx]] = res[idx]
+                else:
+                    data[headers[idx]] = ""
             resources.append(data)
         return resources
 
