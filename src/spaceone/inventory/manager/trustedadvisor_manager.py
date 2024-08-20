@@ -89,6 +89,7 @@ class TrustedAdvisorManager(AWSManager):
 
                 ta_resources.append(CheckResponse({"resource": check_resource}))
             except Exception as e:
+                _LOGGER.error(e)
                 ta_resources.append(self.generate_error(arn, e))
 
         _LOGGER.debug(f" Trusted Advisor Finished {time.time() - start_time} Seconds")
@@ -99,7 +100,7 @@ class TrustedAdvisorManager(AWSManager):
         """
         Return: list
         """
-        headers = ["status"]
+        headers = ["status", "isSuppressed"]
         headers.extend(check_id_data.metadata)
 
         res_list = []
@@ -107,8 +108,8 @@ class TrustedAdvisorManager(AWSManager):
             flagged_resources = checkResult["flaggedResources"]
             for res in flagged_resources:
                 result = [res["status"]]
+                result.extend([str(res.get("isSuppressed", False))])
                 result.extend(res.get("metadata", []))
-                res_list.append(result)
                 res_list.append(result)
         else:
             pass
